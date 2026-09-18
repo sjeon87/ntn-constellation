@@ -76,6 +76,9 @@ class Sgp4MobilityModel : public GeocentricConstantPositionMobilityModel
     Sgp4MobilityModel();
     ~Sgp4MobilityModel() override = default;
 
+    // Inherited from MobilityModel (base-class Copy would slice the orbit state)
+    Ptr<MobilityModel> Copy() const override;
+
     /// Install classical elements directly.
     void SetElements(const KeplerianElements& elements);
 

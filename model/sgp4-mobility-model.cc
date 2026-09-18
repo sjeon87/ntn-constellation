@@ -111,6 +111,12 @@ Sgp4MobilityModel::GetTypeId()
 
 Sgp4MobilityModel::Sgp4MobilityModel() = default;
 
+Ptr<MobilityModel>
+Sgp4MobilityModel::Copy() const
+{
+    return CreateObject<Sgp4MobilityModel>(*this);
+}
+
 void
 Sgp4MobilityModel::SetElements(const KeplerianElements& elements)
 {
