@@ -5,8 +5,10 @@
 #include "ntn-sat-link-error-model.h"
 
 #include "ns3/double.h"
+#ifdef NTN_CONSTELLATION_HAS_THZ_NTN
 #include "ns3/thz-ntn-scintillation.h"
 #include "ns3/thz-ntn-itu-recommendations.h"
+#endif
 #include "ns3/boolean.h"
 #include "ns3/satellite-enums.h"
 #include "ns3/satellite-link-results.h"
@@ -167,6 +169,7 @@ NtnSatLinkErrorModel::ExcessLossDbFor(double elevationDeg) const
     m_lastRainDb = 0.0;
     m_lastScintDb = 0.0;
 
+#ifdef NTN_CONSTELLATION_HAS_THZ_NTN
     // An inter-satellite link, or anything looking up from above the
     // troposphere, crosses no weather. Guard on elevation rather than on an
     // explicit link-type flag so the geometry decides.
@@ -217,6 +220,13 @@ NtnSatLinkErrorModel::ExcessLossDbFor(double elevationDeg) const
                             ->ComputeScintillationFadeDepth_dB(m_carrierHz, elev, 0.01);
     }
     return m_lastGaseousDb + m_lastRainDb + m_lastScintDb;
+#else
+    // Built without the thz-ntn sibling module, so the ITU-R P.676/P.618 terms
+    // have no provider. Keep the FSPL-only budget (pre-CON-2 behaviour) and
+    // report zero excess until the dependency exists.
+    (void)elevationDeg;
+    return 0.0;
+#endif
 }
 
 double

@@ -471,6 +471,8 @@ class SatLinkErrorAtmosphericChainTest : public TestCase
                                       "endpoint positions; it had no elevation input at all");
         }
 
+#ifdef NTN_CONSTELLATION_HAS_THZ_NTN
+
         // Clear sky: gaseous and scintillation still apply, and both must grow
         // as elevation falls because the path through the atmosphere lengthens.
         double prevExcess = -1.0;
@@ -569,6 +571,19 @@ class SatLinkErrorAtmosphericChainTest : public TestCase
                                   "well above threshold it must report a clean one; a flat "
                                   "response means the look-up tables did not load");
         }
+#else
+        // Without thz-ntn the budget is FSPL-only by design.
+        {
+            Ptr<ConstantPositionMobilityModel> gs, sat;
+            Place(30.0, gs, sat);
+            auto m = CreateObject<ntncon::NtnSatLinkErrorModel>();
+            m->SetAttribute("CarrierHz", DoubleValue(20e9));
+            m->SetAttribute("RainRateMmH", DoubleValue(42.0));
+            m->SetEndpoints(sat, gs);
+            NS_TEST_ASSERT_MSG_EQ_TOL(m->CurrentExcessLossDb(), 0.0, 1e-9,
+                                      "without thz-ntn the budget stays FSPL-only even in rain");
+        }
+#endif
 
         Simulator::Destroy();
     }

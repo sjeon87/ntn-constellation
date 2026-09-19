@@ -33,6 +33,18 @@ set(test_sources
     test/ntn-constellation-test-suite.cc
 )
 
+# Optional thz-ntn dependency: provides the ITU-R P.676/P.618 gaseous, rain
+# and scintillation models used by NtnSatLinkErrorModel. It exists in the
+# ns3-ntn-toolkit tree but not in every tree. Detect via the enabled-contrib
+# list (thz-ntn configures after this module alphabetically, so a TARGET
+# check here would always miss) and only then link it and define
+# NTN_CONSTELLATION_HAS_THZ_NTN so the atmospheric chain compiles in.
+# Without it the model builds FSPL-only and reports zero excess loss.
+set(ntn_constellation_optional_libs "")
+if("thz-ntn" IN_LIST contrib_libs_to_build)
+  set(ntn_constellation_optional_libs ${libthz-ntn})
+endif()
+
 build_lib(
   LIBNAME ntn-constellation
   SOURCE_FILES ${source_files}
@@ -42,6 +54,10 @@ build_lib(
     ${libmobility}
     # Full Vallado SGP4 backend reuses the satellite module's reference sgp4unit.
     ${libsatellite}
-    ${libthz-ntn}
+    ${ntn_constellation_optional_libs}
   TEST_SOURCES ${test_sources}
 )
+
+if(ntn_constellation_optional_libs)
+  target_compile_definitions(${libntn-constellation} PUBLIC NTN_CONSTELLATION_HAS_THZ_NTN)
+endif()

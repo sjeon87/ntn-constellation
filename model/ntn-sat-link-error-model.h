@@ -108,6 +108,9 @@ class NtnSatLinkErrorModel : public ErrorModel
     // All three terms reuse the ITU models the toolkit already ships in
     // thz-ntn rather than introducing a second implementation of the same
     // recommendations.
+    // thz-ntn is an optional build dependency (NTN_CONSTELLATION_HAS_THZ_NTN,
+    // see CMakeLists.txt); without it ExcessLossDbFor returns zero and the
+    // budget stays FSPL-only.
     bool m_enableGaseous{true};    //!< ITU-R P.676-13 gaseous absorption
     bool m_enableRain{true};       //!< ITU-R P.618-13 / P.838-3 rain
     bool m_enableScintillation{true}; //!< ITU-R P.618-13 tropospheric scintillation
