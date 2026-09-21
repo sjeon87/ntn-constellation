@@ -12,7 +12,7 @@ build_lib_example(
     ${libpoint-to-point}
     ${libinternet}
     ${libapplications}
-    ${libntn-traffic}
+    ${libtraffic}
 )
 
 # Walker constellation as ephemeris/contact-graph context; ONE serving satellite
@@ -23,7 +23,7 @@ build_lib_example(
   LIBRARIES_TO_LINK
     ${libntn-observability}
     ${libntn-constellation}
-    ${libntn-traffic}
+    ${libtraffic}
     ${libntn-cho}
     ${libcore}
     ${libnetwork}
@@ -43,7 +43,7 @@ build_lib_example(
   SOURCE_FILES ntn-constellation-sgp4-mobility-traffic.cc
   LIBRARIES_TO_LINK
     ${libntn-constellation}
-    ${libntn-traffic}
+    ${libtraffic}
     ${libntn-cho}
     ${libcore}
     ${libnetwork}
@@ -70,5 +70,5 @@ build_lib_example(
     ${libpoint-to-point}
     ${libinternet}
     ${libapplications}
-    ${libntn-traffic}
+    ${libtraffic}
 )
