@@ -422,7 +422,7 @@ class Sgp4GeocentricContractTest : public TestCase
 
         // The elevation the channel model forms must be a real elevation.
         auto gs = CreateObject<GeocentricConstantPositionMobilityModel>();
-        gs->SetGeographicPosition(Vector(45.0, 0.0, 0.0));
+        gs->SetGeographicPosition(Vector(g1.x, g1.y, 0.0));
         const double elev = gs->GetElevationAngle(sat);
         NS_TEST_ASSERT_MSG_GT(elev, 0.0, "elevation must be positive and finite");
         NS_TEST_ASSERT_MSG_LT(elev, 90.001, "elevation cannot exceed the zenith");
