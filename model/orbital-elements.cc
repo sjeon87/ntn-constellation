@@ -5,7 +5,7 @@
 #include "orbital-elements.h"
 
 #include <cmath>
-#include <ctime>
+#include <chrono>
 #include <sstream>
 #include <stdexcept>
 
@@ -110,15 +110,9 @@ DecodeTleEpoch(const std::string& field, double& outUnixS)
     double doy = 0.0;
     if (!ParseDoubleField(field.substr(2), doy))
         return false;
-    std::tm tm{};
-    tm.tm_year = year - 1900;
-    tm.tm_mon = 0;
-    tm.tm_mday = 1;
-    tm.tm_hour = 0;
-    tm.tm_min = 0;
-    tm.tm_sec = 0;
-    time_t base = timegm(&tm);
-    outUnixS = static_cast<double>(base) + (doy - 1.0) * 86400.0;
+    const auto base = std::chrono::sys_days{std::chrono::year{year} / std::chrono::January / 1};
+    outUnixS =
+        std::chrono::duration<double>(base.time_since_epoch()).count() + (doy - 1.0) * 86400.0;
     return true;
 }
 
