@@ -10,6 +10,7 @@
 #include "ns3/thz-ntn-itu-recommendations.h"
 #endif
 #include "ns3/boolean.h"
+#include "ns3/packet.h"
 #include "ns3/satellite-enums.h"
 #include "ns3/satellite-link-results.h"
 #include "ns3/uinteger.h"
